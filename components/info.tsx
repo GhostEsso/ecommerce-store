@@ -7,6 +7,7 @@ import { ShoppingCart } from "lucide-react";
 import useCart from "@/hooks/use-cart";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface InfoProps {
   data: Product;
@@ -14,8 +15,18 @@ interface InfoProps {
 
 const Info: React.FC<InfoProps> = ({ data }) => {
 
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const router = useRouter();
   const cart = useCart();
+
+  if (!isMounted) {
+    return null
+  }
 
   const items = useCart((state) => state.items);
 
@@ -52,6 +63,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
         <Button className="flex items-center gap-x-2" onClick={() => router.push("/cart")}>
             Ajouter au Panier
             <ShoppingCart />
+            {cart.items.length}
         </Button>
       </div>
     </div>
