@@ -1,20 +1,18 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import useCart from "@/hooks/use-cart";
+import { useRouter } from "next/navigation";
 import { Product } from "@/types";
 import Currency from "@/components/ui/currency";
 import Button from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
-import useCart from "@/hooks/use-cart";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ShoppingBag, ShoppingCart } from "lucide-react";
 
 interface InfoProps {
   data: Product;
 }
 
 const Info: React.FC<InfoProps> = ({ data }) => {
-
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -28,15 +26,6 @@ const Info: React.FC<InfoProps> = ({ data }) => {
     return null
   }
 
-  const items = useCart((state) => state.items);
-
-  const onCheckout = async () => {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
-        productIds: items.map((item) => item.id),
-    });
-
-    window.location = response.data.url;
-}
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900">{data.name}</h1>
@@ -60,10 +49,13 @@ const Info: React.FC<InfoProps> = ({ data }) => {
         </div>
       </div>
       <div className="mt-10 flex items-center gap-x-3">
-        <Button className="flex items-center gap-x-2" onClick={() => router.push("/cart")}>
-            Ajouter au Panier
-            <ShoppingCart />
-            {cart.items.length}
+        <Button onClick={() => router.push("/cart")} className="flex items-center gap-x-2">
+          Ajouter au Panier
+          <ShoppingCart />
+          <ShoppingBag size={20} color="white" />
+        <span className="ml-2 text-sm font-medium text-white">
+          {cart.items.length}
+        </span>
         </Button>
       </div>
     </div>
