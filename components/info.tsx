@@ -6,12 +6,16 @@ import Button from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import useCart from "@/hooks/use-cart";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 interface InfoProps {
   data: Product;
 }
 
 const Info: React.FC<InfoProps> = ({ data }) => {
+
+  const router = useRouter();
+  const cart = useCart();
 
   const items = useCart((state) => state.items);
 
@@ -45,7 +49,7 @@ const Info: React.FC<InfoProps> = ({ data }) => {
         </div>
       </div>
       <div className="mt-10 flex items-center gap-x-3">
-        <Button className="flex items-center gap-x-2" onClick={onCheckout}>
+        <Button className="flex items-center gap-x-2" onClick={() => router.push("/cart")}>
             Ajouter au Panier
             <ShoppingCart />
         </Button>
