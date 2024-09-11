@@ -1,30 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import useCart from "@/hooks/use-cart";
-import { useRouter } from "next/navigation";
 import { Product } from "@/types";
 import Currency from "@/components/ui/currency";
 import Button from "@/components/ui/button";
-import { ShoppingBag, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
+import useCart from "@/hooks/use-cart";  // Import du hook useCart
 
 interface InfoProps {
   data: Product;
 }
 
 const Info: React.FC<InfoProps> = ({ data }) => {
-  const [isMounted, setIsMounted] = useState(false);
+  const cart = useCart(); // Utilisation du hook pour ajouter au panier
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const router = useRouter();
-  const cart = useCart();
-
-  if (!isMounted) {
-    return null
-  }
+  const handleAddToCart = () => {
+    cart.addItem(data); // Ajoute l'article au panier
+  };
 
   return (
     <div>
@@ -49,13 +40,9 @@ const Info: React.FC<InfoProps> = ({ data }) => {
         </div>
       </div>
       <div className="mt-10 flex items-center gap-x-3">
-        <Button onClick={() => router.push("/cart")} className="flex items-center gap-x-2">
+        <Button onClick={handleAddToCart} className="flex items-center gap-x-2">
           Ajouter au Panier
           <ShoppingCart />
-          <ShoppingBag size={20} color="white" />
-        <span className="ml-2 text-sm font-medium text-white">
-          {cart.items.length}
-        </span>
         </Button>
       </div>
     </div>
