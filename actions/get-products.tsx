@@ -11,25 +11,29 @@ interface Query {
 }
 
 const getProducts = async (query: Query): Promise<Product[]> => {
-  if (!process.env.NEXT_PUBLIC_API_URL) return [];
+  try {
+    if (!process.env.NEXT_PUBLIC_API_URL) return [];
 
-  const url = qs.stringifyUrl({
-    url: URL,
-    query: {
-      colorId: query.colorId,
-      sizeId: query.sizeId,
-      categoryId: query.categoryId,
-      isFeatured: query.isFeatured,
-    },
-  });
+    const url = qs.stringifyUrl({
+      url: URL,
+      query: {
+        colorId: query.colorId,
+        sizeId: query.sizeId,
+        categoryId: query.categoryId,
+        isFeatured: query.isFeatured,
+      },
+    });
 
-  const res = await fetch(url);
+    const res = await fetch(url);
 
-  if (!res.ok) {
+    if (!res.ok) {
+      return [];
+    }
+
+    return await res.json();
+  } catch (error) {
     return [];
   }
-
-  return res.json();
 };
 
 export default getProducts;

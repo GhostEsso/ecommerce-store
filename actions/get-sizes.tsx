@@ -3,13 +3,17 @@ import { Size } from "@/types";
 const URL = `${process.env.NEXT_PUBLIC_API_URL}/sizes`;
 
 const getSizes = async(): Promise<Size[]> => {
-    if (!process.env.NEXT_PUBLIC_API_URL) return [];
+    try {
+        if (!process.env.NEXT_PUBLIC_API_URL) return [];
 
-    const res = await fetch(URL);
+        const res = await fetch(URL);
 
-    if (!res.ok) return [];
+        if (!res.ok) return [];
 
-    return res.json();
+        return await res.json();
+    } catch (error) {
+        return [];
+    }
 }
 
 export default getSizes;
