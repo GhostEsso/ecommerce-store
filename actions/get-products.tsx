@@ -11,6 +11,8 @@ interface Query {
 }
 
 const getProducts = async (query: Query): Promise<Product[]> => {
+  if (!process.env.NEXT_PUBLIC_API_URL) return [];
+
   const url = qs.stringifyUrl({
     url: URL,
     query: {
@@ -21,10 +23,10 @@ const getProducts = async (query: Query): Promise<Product[]> => {
     },
   });
 
-  const res = await fetch(url); // Utilise `url` ici pour inclure les paramètres de requête
+  const res = await fetch(url);
 
   if (!res.ok) {
-    throw new Error("Failed to fetch products");
+    return [];
   }
 
   return res.json();
